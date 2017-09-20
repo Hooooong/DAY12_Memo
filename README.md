@@ -3,7 +3,7 @@
 ### 설명
 ____________________________________________________
 
-![Memo]()
+![Memo](https://github.com/Hooooong/DAY12_Memo/blob/master/image/Android%20Memo.gif)
 
 - ListView 를 통한 메모장 리스트 나열
 - File I/O 를 통해 메모 작성
