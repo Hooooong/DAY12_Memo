@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import hooooong.com.androidmemo.domain.Memo;
@@ -16,13 +17,13 @@ import hooooong.com.androidmemo.domain.Memo;
  * Created by Android Hong on 2017-09-19.
  */
 
-public class CustomAdapter extends BaseAdapter {
+public class ListAdapter extends BaseAdapter {
     // 데이터 저장소를 Adapter 내부에 저장하는것이 관리하기 편하다.
 
     Context context;
     List<Memo> memoList;
 
-    CustomAdapter(Context context, List<Memo> memoList) {
+    ListAdapter(Context context, List<Memo> memoList) {
         this.context = context;
         this.memoList = memoList;
     }
@@ -56,38 +57,54 @@ public class CustomAdapter extends BaseAdapter {
         } else {
             holder = (Holder) convertView.getTag();
         }
-        holder.textNo.setText(Integer.toString(memoList.get(position).getNo()));
-        holder.textTitle.setText(memoList.get(position).getTitle());
-        //holder.textDate.setText(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date(memoList.get(position).getDateTime())));
+
+        Memo memo = memoList.get(position);
+        holder.setTextNo(memo.getNo());
+        holder.setTextTitle(memo.getTitle());
+        holder.setTextDateTime(memo.getDateTime());
+        holder.setPosition(position);
 
         return convertView;
     }
 
     class Holder {
-        TextView textNo;
-        TextView textTitle;
-        TextView textDate;
+        private int position;
+        private TextView textNo;
+        private TextView textTitle;
+        private TextView textDateTime;
 
-        Holder(View view) {
+        public Holder(View view) {
             textNo = (TextView) view.findViewById(R.id.textNo);
             textTitle = (TextView) view.findViewById(R.id.textTitle);
-            textDate = (TextView) view.findViewById(R.id.textDate);
-            setOnClickListener();
-        }
+            textDateTime = (TextView) view.findViewById(R.id.textDateTime);
 
-        // 화면에 보여지는 View 는
-        // 기본적으로 자신이 속한 Component 의 Context 를 그대로 가지고 잇다.
-        public void setOnClickListener(){
-            textTitle.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-
-                    Intent intent = new Intent(view.getContext(), DetailActivity.class);
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), DetailActivity.class);
                     // Intent 에 값을 넘겨주기 위해
                     // putExtra 를 사용한다.
-                    view.getContext().startActivity(intent);
+                    intent.putExtra("memo", memoList.get(position));
+                    v.getContext().startActivity(intent);
                 }
             });
+        }
+
+        public void setTextNo(int no) {
+            textNo.setText(no+"");
+        }
+
+        public void setTextTitle(String title) {
+            textTitle.setText(title);
+        }
+
+        public void setPosition(int position){
+            this.position = position;
+        }
+
+        public void setTextDateTime(long dateTime) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+            textDateTime.setText(simpleDateFormat.format(dateTime));
         }
     }
 }
