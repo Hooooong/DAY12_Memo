@@ -17,9 +17,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class FileUtil {
     /**
      * File 쓰기 함수
+     *
      * @param context
      * @param fileName : 파일 이름
-     * @param content : 내용
+     * @param content  : 내용
      * @throws IOException
      */
     public static void write(Context context, String fileName, String content) throws IOException {
@@ -44,7 +45,7 @@ public class FileUtil {
      * File 읽기 함수
      *
      * @param context
-     * @param fileName
+     * @param fileName : 읽을 파일 명
      * @return
      * @throws IOException
      */
@@ -53,7 +54,7 @@ public class FileUtil {
 
         FileInputStream fis = null;
         BufferedInputStream bis = null;
-        try{
+        try {
             fis = context.openFileInput(fileName);
             // 버퍼를 달고
             bis = new BufferedInputStream(fis);
@@ -61,27 +62,27 @@ public class FileUtil {
             byte buffer[] = new byte[1024];
             // 현재 읽은 양을 담는 변수 설정
             int count = 0;
-            // 읽은 값을 buffer 에 넣고, count 에
-            while ( (count =  bis.read(buffer)) != -1 ){
+            // 읽은 값을 buffer 에 넣고, count 에 넣은 크기를 반환한다.
+            while ((count = bis.read(buffer)) != -1) {
                 // readLine 과는 다르게 \n 을 문자열로 인식하기 때문에
                 // 더해줄 필요가 없다.
                 String data = new String(buffer, 0, count);
                 stringBuffer.append(data);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             throw e;
-        }finally {
-            if(bis != null){
-                try{
+        } finally {
+            if (bis != null) {
+                try {
                     bis.close();
-                }catch(IOException e){
+                } catch (IOException e) {
                     throw e;
                 }
             }
-            if(fis != null){
-                try{
+            if (fis != null) {
+                try {
                     fis.close();
-                }catch(IOException e){
+                } catch (IOException e) {
                     throw e;
                 }
             }
@@ -89,6 +90,4 @@ public class FileUtil {
 
         return stringBuffer.toString();
     }
-
-
 }

@@ -131,7 +131,7 @@ public class WriteActivity extends AppCompatActivity {
     }
 
     /**
-     * 파일 작성
+     * File 작성
      *
      * @param memo
      */

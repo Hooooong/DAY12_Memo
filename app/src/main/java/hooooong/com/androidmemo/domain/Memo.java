@@ -6,9 +6,9 @@ import java.io.Serializable;
  * Created by Android Hong on 2017-09-19.
  */
 
-public class Memo implements Serializable{
+public class Memo implements Serializable {
 
-    private static final String DELIMETER ="//";
+    private static final String DELIMETER = "//";
 
     private int no;
     private String title;
@@ -16,29 +16,35 @@ public class Memo implements Serializable{
     private String content;
     private long dateTime;
 
-    public Memo(){
+    public Memo() {
 
     }
 
+    /**
+     * File 의 Text 를 통해
+     * Memo 를 생성해 주기 위한 Memo 생성자 Overloading
+     *
+     * @param text
+     */
     public Memo(String text) {
         // 1. 값을 줄(\n) 단위로 분해한다.
         String lines[] = text.split("\n");
 
-        for(String line : lines){
+        for (String line : lines) {
             // 2. 문자열을 행(":^:") 단위로 분해한다.
             String columns[] = line.split(DELIMETER);
 
             String key = "";
             String value = "";
 
-            if(columns.length == 2){
+            if (columns.length == 2) {
                 key = columns[0];
                 value = columns[1];
-            }else{
+            } else {
                 key = "";
                 value = columns[0];
             }
-            switch (key){
+            switch (key) {
                 case "no":
                     setNo(Integer.parseInt(value));
                     break;
@@ -54,7 +60,7 @@ public class Memo implements Serializable{
                 case "content":
                     setContent(value);
                     break;
-                default :
+                default:
                     appendContent(value);
                     break;
             }
@@ -101,7 +107,21 @@ public class Memo implements Serializable{
         this.dateTime = dateTime;
     }
 
-    public String toString(){
+    /**
+     * File 을 작성하기 위한 toString Override
+     *
+     * ex)
+     * no//1
+     * author//이흥기
+     * title//메모타이틀
+     * content//메모내용
+     * 오오오우오우오
+     * ㅇ오우ㅗ우옹
+     * datetime//1010293840
+     *
+     * @return
+     */
+    public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("no").append(DELIMETER).append(no).append("\n");
         result.append("author").append(DELIMETER).append(author).append("\n");
@@ -112,11 +132,12 @@ public class Memo implements Serializable{
         return result.toString();
     }
 
-    public byte[] toBytes(){
-        return toString().getBytes();
-    }
-
-    public void appendContent(String value){
-        content += "\n"+value;
+    /**
+     * Content 를 연결하기 위한 메소드
+     *
+     * @param value
+     */
+    public void appendContent(String value) {
+        content += "\n" + value;
     }
 }

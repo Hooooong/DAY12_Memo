@@ -12,14 +12,11 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import hooooong.com.androidmemo.domain.Memo;
 import hooooong.com.androidmemo.util.FileUtil;
 
 public class ListActivity extends AppCompatActivity {
-
-    List<Memo> memoList = new ArrayList<>();
 
     ListView listView;
     FloatingActionButton btnAdd;
@@ -47,7 +44,7 @@ public class ListActivity extends AppCompatActivity {
         init();
     }
 
-    private void init(){
+    private void init() {
         Log.d("ListActivity", "Called init()");
 
         ArrayList<Memo> memoList = loadData();
@@ -60,7 +57,7 @@ public class ListActivity extends AppCompatActivity {
      *
      * @return
      */
-    private ArrayList<Memo> loadData(){
+    private ArrayList<Memo> loadData() {
 
         // 첫번째 파일 목록 가져오는 법
         // 파일 목록 가져오기
@@ -94,7 +91,7 @@ public class ListActivity extends AppCompatActivity {
         ArrayList<Memo> memoList = new ArrayList<>();
         // 파일 목록에서 파일 하나씩 꺼낸 후에
         // Memo 클래스로 변환한 후 memoList 에 담는다.
-        for(File item : getFilesDir().listFiles()){
+        for (File item : getFilesDir().listFiles()) {
             Memo memo;
             try {
                 String text = FileUtil.read(getBaseContext(), item.getName());
@@ -107,20 +104,21 @@ public class ListActivity extends AppCompatActivity {
         return memoList;
     }
 
-    private void initVIew(){
-        listView = (ListView)findViewById(R.id.listView);
-        btnAdd = (FloatingActionButton)findViewById(R.id.btnAdd);
+    private void initVIew() {
+        listView = (ListView) findViewById(R.id.listView);
+        btnAdd = (FloatingActionButton) findViewById(R.id.btnAdd);
 
 
     }
 
     private static final int WRITE_INTENT = 99;
-            private void initListener(){
-                btnAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getBaseContext(), WriteActivity.class);
-                        //startActivity(intent);
+
+    private void initListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), WriteActivity.class);
+                //startActivity(intent);
 
                 // startActivityForResult( intent, 호출된 코드)
                 startActivityForResult(intent, WRITE_INTENT);
@@ -139,9 +137,9 @@ public class ListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
+        switch (requestCode) {
             case WRITE_INTENT:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     /**
                      * getStringExtra();
                      *  - StringExtra 만 초기값이 null 이기 때문에 설정을 해주지 않아도 되지만

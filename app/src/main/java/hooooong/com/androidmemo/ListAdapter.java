@@ -82,8 +82,18 @@ public class ListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                    // Intent 에 값을 넘겨주기 위해
-                    // putExtra 를 사용한다.
+                    // Intent 에 값을 넘겨주기 위해 putExtra 를 사용한다.
+
+                    /**
+                     * 값을 넘겨주는 방법
+                     *
+                     *
+                     * 1. Intent 를 통해 객체를 Serialize 하여 넘겨준다.
+                     * 2. Intent 를 통해 모든 값들을 넘겨준다.
+                     *  - 위의 1, 2 번은 값을 복사하기 때문에 메모리 낭비가 될 수 있다.
+                     *
+                     * 3. ArrayList에 저장된 데이터를 static 으로 설정하여 Activity 에서 사용한다.
+                     */
                     intent.putExtra("memo", memoList.get(position));
                     v.getContext().startActivity(intent);
                 }

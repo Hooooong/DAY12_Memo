@@ -37,6 +37,9 @@ public class DetailActivity extends AppCompatActivity {
         textContent = (TextView)findViewById(R.id.textContent);
     }
 
+    /**
+     * 넘겨받은 Memo 데이터를 통해 TextView 에 넣어주는 메소드
+     */
     private void initData(){
         textTitle.setText(memo.getTitle());
         textAuthor.setText(memo.getAuthor());
