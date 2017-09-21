@@ -10,6 +10,11 @@ public class Memo implements Serializable {
 
     private static final String DELIMETER = "//";
 
+    /**
+     * 파일 삭제하기 위한 fileName 추가;
+     */
+    private String fileName;
+
     private int no;
     private String title;
     private String author;
@@ -45,6 +50,9 @@ public class Memo implements Serializable {
                 value = columns[0];
             }
             switch (key) {
+                case "fileName":
+                    setFileName(value);
+                    break;
                 case "no":
                     setNo(Integer.parseInt(value));
                     break;
@@ -105,6 +113,14 @@ public class Memo implements Serializable {
 
     public void setDateTime(long dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     /**

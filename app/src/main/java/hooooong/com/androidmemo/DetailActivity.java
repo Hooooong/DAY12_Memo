@@ -3,19 +3,25 @@ package hooooong.com.androidmemo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
 import hooooong.com.androidmemo.domain.Memo;
+import hooooong.com.androidmemo.util.FileUtil;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     Memo memo;
     TextView textTitle;
     TextView textAuthor;
     TextView textDateTime;
     TextView textContent;
+
+    Button btnDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
 
         initView();
         initData();
+        initListener();
     }
 
     private  void initView(){
@@ -35,6 +42,8 @@ public class DetailActivity extends AppCompatActivity {
         textAuthor = (TextView)findViewById(R.id.textAuthor);
         textDateTime = (TextView)findViewById(R.id.textDateTime);
         textContent = (TextView)findViewById(R.id.textContent);
+
+        btnDelete = (Button)findViewById(R.id.btnDelete);
     }
 
     /**
@@ -48,5 +57,23 @@ public class DetailActivity extends AppCompatActivity {
         textDateTime.setText(simpleDateFormat.format(memo.getDateTime()));
 
         textContent.setText(memo.getContent());
+    }
+
+    private void initListener(){
+        btnDelete.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnDelete:
+                if(FileUtil.delete(getBaseContext(), memo.getFileName())){
+                    Toast.makeText(getBaseContext(), "파일이 삭제되었습니다.",  Toast.LENGTH_LONG).show();
+                    finish();
+                }else{
+                    Toast.makeText(getBaseContext(), "파일삭제가 실패하였습니다.",  Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
     }
 }

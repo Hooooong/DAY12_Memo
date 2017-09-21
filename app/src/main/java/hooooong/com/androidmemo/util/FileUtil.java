@@ -15,6 +15,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class FileUtil {
+
     /**
      * File 쓰기 함수
      *
@@ -63,6 +64,11 @@ public class FileUtil {
             // 현재 읽은 양을 담는 변수 설정
             int count = 0;
             // 읽은 값을 buffer 에 넣고, count 에 넣은 크기를 반환한다.
+
+            /**
+             * 파일 명 추가
+             */
+            stringBuffer.append("fileName//"+fileName+"\n");
             while ((count = bis.read(buffer)) != -1) {
                 // readLine 과는 다르게 \n 을 문자열로 인식하기 때문에
                 // 더해줄 필요가 없다.
@@ -90,4 +96,15 @@ public class FileUtil {
 
         return stringBuffer.toString();
     }
+
+    /**
+     * 파일 삭제 함수
+     *
+     * @param context
+     * @param fileName
+     */
+    public static boolean delete(Context context, String fileName){
+        return context.deleteFile(fileName);
+    }
+
 }

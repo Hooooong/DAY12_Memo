@@ -26,6 +26,8 @@ ____________________________________________________
 
       - Output : `openFileOutput(파일명, MODE 속성)`
 
+      - Delete : `deleteFile(파일명)`
+
   - 파일 목록을 가져오는 방법
 
       - `getFileDir()` : 파일 경로를 불러올 수 있다. 파일 경로는 `/data/data/[패키지 이름]/files` 형식으로 되어 있다.
@@ -100,13 +102,20 @@ ____________________________________________________
 
       private static final String DELIMETER = "//";
 
+      /**
+       * 파일 삭제하기 위한 fileName 추가;
+       */
+      private String fileName;
+
       private int no;
       private String title;
       private String author;
       private String content;
       private long dateTime;
 
-      public Memo() {}
+      public Memo() {
+
+      }
 
       /**
        * File 의 Text 를 통해
@@ -133,6 +142,9 @@ ____________________________________________________
                   value = columns[0];
               }
               switch (key) {
+                  case "fileName":
+                      setFileName(value);
+                      break;
                   case "no":
                       setNo(Integer.parseInt(value));
                       break;
@@ -195,6 +207,14 @@ ____________________________________________________
           this.dateTime = dateTime;
       }
 
+      public String getFileName() {
+          return fileName;
+      }
+
+      public void setFileName(String fileName) {
+          this.fileName = fileName;
+      }
+
       /**
        * File 을 작성하기 위한 toString Override
        *
@@ -239,85 +259,100 @@ ____________________________________________________
 
   - Input :  `openFileInput(파일명)` 메소드를 사용하여 FileInputStream 설정 및 Stream 을 통해 파일을 읽는다.
 
+  - Delete : `deleteFile(파일명)` 메소드를 사용하면 `파일명`으로 지정한 특정 파일을 삭제한다.
+
   ```java
-  public class FileUtil {
+  /**
+    * File 쓰기 함수
+    *
+    * @param context
+    * @param fileName : 파일 이름
+    * @param content  : 내용
+    * @throws IOException
+    */
+   public static void write(Context context, String fileName, String content) throws IOException {
+       FileOutputStream fos = null;
+       try {
+           fos = context.openFileOutput(fileName, MODE_PRIVATE);
+           fos.write(content.getBytes());
+       } catch (Exception e) {
+           throw e;
+       } finally {
+           if (fos != null) {
+               try {
+                   fos.close();
+               } catch (IOException e) {
+                   throw e;
+               }
+           }
+       }
+   }
 
-      /**
-       * File 쓰기 함수
-       *
-       * @param context
-       * @param fileName : 파일 이름
-       * @param content  : 내용
-       * @throws IOException
-       */
-      public static void write(Context context, String fileName, String content) throws IOException {
-          FileOutputStream fos = null;
-          try {
-              fos = context.openFileOutput(fileName, MODE_PRIVATE);
-              fos.write(content.getBytes());
-          } catch (Exception e) {
-              throw e;
-          } finally {
-              if (fos != null) {
-                  try {
-                      fos.close();
-                  } catch (IOException e) {
-                      throw e;
-                  }
-              }
-          }
-      }
+   /**
+    * File 읽기 함수
+    *
+    * @param context
+    * @param fileName : 읽을 파일 명
+    * @return
+    * @throws IOException
+    */
+   public static String read(Context context, String fileName) throws IOException {
+       StringBuilder stringBuffer = new StringBuilder();
 
-      /**
-       * File 읽기 함수
-       *
-       * @param context
-       * @param fileName : 읽을 파일 명
-       * @return
-       * @throws IOException
-       */
-      public static String read(Context context, String fileName) throws IOException {
-          StringBuilder stringBuffer = new StringBuilder();
+       FileInputStream fis = null;
+       BufferedInputStream bis = null;
+       try {
+           fis = context.openFileInput(fileName);
+           // 버퍼를 달고
+           bis = new BufferedInputStream(fis);
+           // 한번에 읽어올 버퍼 양을 설정한다.
+           byte buffer[] = new byte[1024];
+           // 현재 읽은 양을 담는 변수 설정
+           int count = 0;
+           // 읽은 값을 buffer 에 넣고, count 에 넣은 크기를 반환한다.
 
-          FileInputStream fis = null;
-          BufferedInputStream bis = null;
-          try {
-              fis = context.openFileInput(fileName);
-              // 버퍼를 달고
-              bis = new BufferedInputStream(fis);
-              // 한번에 읽어올 버퍼 양을 설정한다.
-              byte buffer[] = new byte[1024];
-              // 현재 읽은 양을 담는 변수 설정
-              int count = 0;
-              // 읽은 값을 buffer 에 넣고, count 에
-              while ((count = bis.read(buffer)) != -1) {
-                  // readLine 과는 다르게 \n 을 문자열로 인식하기 때문에
-                  // 더해줄 필요가 없다.
-                  String data = new String(buffer, 0, count);
-                  stringBuffer.append(data);
-              }
-          } catch (IOException e) {
-              throw e;
-          } finally {
-              if (bis != null) {
-                  try {
-                      bis.close();
-                  } catch (IOException e) {
-                      throw e;
-                  }
-              }
-              if (fis != null) {
-                  try {
-                      fis.close();
-                  } catch (IOException e) {
-                      throw e;
-                  }
-              }
-          }
+           /**
+            * 파일 명 추가
+            */
+           stringBuffer.append("fileName//"+fileName+"\n");
 
-          return stringBuffer.toString();
-      }
-  }
+           while ((count = bis.read(buffer)) != -1) {
+               // readLine 과는 다르게 \n 을 문자열로 인식하기 때문에
+               // 더해줄 필요가 없다.
+               String data = new String(buffer, 0, count);
+               stringBuffer.append(data);
+           }
+       } catch (IOException e) {
+           throw e;
+       } finally {
+           if (bis != null) {
+               try {
+                   bis.close();
+               } catch (IOException e) {
+                   throw e;
+               }
+           }
+           if (fis != null) {
+               try {
+                   fis.close();
+               } catch (IOException e) {
+                   throw e;
+               }
+           }
+       }
+
+       return stringBuffer.toString();
+   }
+
+   /**
+    * 파일 삭제 함수
+    *
+    * @param context
+    * @param fileName
+    */
+   public static boolean delete(Context context, String fileName){
+       return context.deleteFile(fileName);
+   }
   ```
 
 - ListActivity.java
@@ -705,13 +740,15 @@ ____________________________________________________
     - 넘겨받은 Memo 객체를 활용해 화면에 그려준다.
 
     ```java
-    public class DetailActivity extends AppCompatActivity {
+    public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
 
         Memo memo;
         TextView textTitle;
         TextView textAuthor;
         TextView textDateTime;
         TextView textContent;
+
+        Button btnDelete;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -724,6 +761,7 @@ ____________________________________________________
 
             initView();
             initData();
+            initListener();
         }
 
         private  void initView(){
@@ -731,6 +769,8 @@ ____________________________________________________
             textAuthor = (TextView)findViewById(R.id.textAuthor);
             textDateTime = (TextView)findViewById(R.id.textDateTime);
             textContent = (TextView)findViewById(R.id.textContent);
+
+            btnDelete = (Button)findViewById(R.id.btnDelete);
         }
 
         /**
@@ -744,6 +784,24 @@ ____________________________________________________
             textDateTime.setText(simpleDateFormat.format(memo.getDateTime()));
 
             textContent.setText(memo.getContent());
+        }
+
+        private void initListener(){
+            btnDelete.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btnDelete:
+                    if(FileUtil.delete(getBaseContext(), memo.getFileName())){
+                        Toast.makeText(getBaseContext(), "파일이 삭제되었습니다.",  Toast.LENGTH_LONG).show();
+                        finish();
+                    }else{
+                        Toast.makeText(getBaseContext(), "파일삭제가 실패하였습니다.",  Toast.LENGTH_LONG).show();
+                    }
+                    break;
+            }
         }
     }
     ```
