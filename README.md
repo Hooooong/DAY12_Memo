@@ -12,6 +12,10 @@ ____________________________________________________
 ### KeyPoint
 ____________________________________________________
 
+- Activity 의 생명주기 와 Activity Result, Style.xml
+
+    - 참조 : [Activity 생명주기, Acitivty 결과](https://github.com/Hooooong/DAY13_Activity_etc)
+
 - File I/O
 
   - 안드로이드는 File Input 에는 2가지 종류가 있다.
@@ -81,10 +85,6 @@ ____________________________________________________
           stringBuffer.append(data);
       }
       ```
-
-- Activity 의 생명주기 와 Activity Result, Style.xml
-
-    - 참조 : [Activity 생명주기, Acitivty 결과](https://github.com/Hooooong/DAY13_Activity_etc)
 
 ### Code Review
 ____________________________________________________
