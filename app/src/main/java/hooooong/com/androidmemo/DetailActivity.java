@@ -71,7 +71,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(getBaseContext(), "파일이 삭제되었습니다.",  Toast.LENGTH_LONG).show();
                     finish();
                 }else{
-                    Toast.makeText(getBaseContext(), "파일삭제가 실패하였습니다.",  Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "파일 삭제가 실패하였습니다.",  Toast.LENGTH_LONG).show();
                 }
                 break;
         }

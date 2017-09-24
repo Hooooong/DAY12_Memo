@@ -1,4 +1,4 @@
-# 메모장 예제
+# File I/O 를 사용한 메모장 만들기
 
 ### 설명
 ____________________________________________________
@@ -7,7 +7,6 @@ ____________________________________________________
 
 - ListView 를 통한 메모장 리스트 나열
 - File I/O 를 통해 메모 작성
-
 
 ### KeyPoint
 ____________________________________________________
@@ -47,10 +46,8 @@ ____________________________________________________
       String dir_path = getFilesDir().getAbsolutePath();
       // 1-1. 파일을 생성
       File file = new File(dir_path);
-
       // 1-2. 파일의 목록을 배열로 반환
       File files[] = file.listFiles();
-
       for(File item : files){
           System.out.println(item.getName());
       }
@@ -71,8 +68,9 @@ ____________________________________________________
       - 특이하게도 `BufferdInputStream객체.read(byte객체)`를 하면 읽는 순간 byte 객체에 데이터가 들어가고 읽은 크기만큼 return해준다.
 
       ```java
+      FileInputStream fis = context.openFileInput(파일명);
       // 버퍼를 달고
-      bis = new BufferedInputStream(fis);
+      BufferedInputStream bis = new BufferedInputStream(fis);
       // 한번에 읽어올 버퍼 양을 설정한다.
       byte buffer[] = new byte[1024];
       // 현재 읽은 양을 담는 변수 설정
